@@ -277,11 +277,11 @@ class MixinTestCase:
 
     @pytest.mark.asyncio
     async def test_abort_requests(self):
-        async def should_abort_request_async(request):
-            return request.resource_type == "image"
+        async def should_abort_request_async(playwright_request, _):
+            return playwright_request.resource_type == "image"
 
-        def should_abort_request_sync(request):
-            return request.resource_type == "image"
+        def should_abort_request_sync(playwright_request, _):
+            return playwright_request.resource_type == "image"
 
         for predicate in (
             lambda request: request.resource_type == "image",
