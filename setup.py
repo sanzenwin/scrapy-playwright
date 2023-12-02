@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 
 setuptools.setup(
-    name="scrapy-playwright",
+    name="scrapy-playwright-full",
     version=__version__,
     license="BSD",
     description="Playwright integration for Scrapy",

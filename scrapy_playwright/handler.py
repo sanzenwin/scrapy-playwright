@@ -154,7 +154,9 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
         else:
             self.process_request_headers = use_scrapy_headers
 
-        self.abort_request: Optional[Callable[[PlaywrightRequest], Union[Awaitable, bool]]] = None
+        self.abort_request: Optional[
+            Callable[[PlaywrightRequest, Request], Union[Awaitable, bool]]
+        ] = None
         if crawler.settings.get("PLAYWRIGHT_ABORT_REQUEST"):
             self.abort_request = load_object(crawler.settings["PLAYWRIGHT_ABORT_REQUEST"])
 
@@ -357,6 +359,7 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
                 body=request.body,
                 encoding=request.encoding,
                 spider=spider,
+                request=request,
             ),
         )
 
@@ -591,11 +594,12 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
         body: Optional[bytes],
         encoding: str,
         spider: Spider,
+        request: Request,
     ) -> Callable:
         async def _request_handler(route: Route, playwright_request: PlaywrightRequest) -> None:
             """Override request headers, method and body."""
             if self.abort_request:
-                should_abort = await _maybe_await(self.abort_request(playwright_request))
+                should_abort = await _maybe_await(self.abort_request(playwright_request, request))
                 if should_abort:
                     await route.abort()
                     logger.debug(

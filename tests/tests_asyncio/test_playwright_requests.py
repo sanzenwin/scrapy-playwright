@@ -121,6 +121,7 @@ class MixinTestCase:
                 body=None,
                 encoding="utf-8",
                 spider=spider,
+                request=scrapy_request,
             )
             route = MagicMock()
             playwright_request = AsyncMock()
