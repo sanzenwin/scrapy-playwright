@@ -284,7 +284,7 @@ class MixinTestCase:
             return playwright_request.resource_type == "image"
 
         for predicate in (
-            lambda request: request.resource_type == "image",
+            lambda request, _: request.resource_type == "image",
             should_abort_request_async,
             should_abort_request_sync,
         ):
