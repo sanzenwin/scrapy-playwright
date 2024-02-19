@@ -1,3 +1,4 @@
+import platform
 from asyncio.subprocess import Process as AsyncioProcess
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock, patch
@@ -34,6 +35,7 @@ class MockMemoryInfo:
 
 
 @patch("scrapy.extensions.memusage.MailSender")
+@pytest.mark.skipif(platform.system() == "Windows", reason="Test Resources skip Windows")
 class TestMemoryUsageExtension(IsolatedAsyncioTestCase):
     @pytest.mark.asyncio
     async def test_process_availability(self, _MailSender):
