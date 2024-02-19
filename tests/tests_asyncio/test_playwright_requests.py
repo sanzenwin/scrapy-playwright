@@ -53,7 +53,6 @@ class MixinTestCase:
             assert resp.css("a::text").getall() == ["Lorem Ipsum", "Infinite Scroll"]
             assert isinstance(resp.meta["playwright_page"], PlaywrightPage)
             assert resp.meta["playwright_page"].url == resp.url
-
             await resp.meta["playwright_page"].close()
 
     @pytest.mark.asyncio
