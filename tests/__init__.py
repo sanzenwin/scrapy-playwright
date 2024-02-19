@@ -1,7 +1,6 @@
 import inspect
-import pytest
 from contextlib import asynccontextmanager
-
+import pytest
 from scrapy import Request
 from scrapy.http.response.html import HtmlResponse
 from scrapy.utils.test import get_crawler
