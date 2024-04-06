@@ -43,26 +43,15 @@ from scrapy_playwright._utils import (
 
 # Supporting for Windows
 if sys.platform == "win32" and sys.version_info >= (3, 8):
-    import threading
+    from dektools.sync import EnvSet
 
-    class Var:
-        windows_loop = None
-        windows_thread = None
+    class WindowsEnvSet(EnvSet):
+        event_loop_policy_cls = asyncio.WindowsProactorEventLoopPolicy
 
-    def windows_get_asyncio_event_loop():
-        if Var.windows_thread is None:
-            if Var.windows_loop is None:
-                Var.windows_loop = asyncio.WindowsProactorEventLoopPolicy().new_event_loop()
-                asyncio.set_event_loop(Var.windows_loop)
-            if not Var.windows_loop.is_running():
-                Var.windows_thread = threading.Thread(
-                    target=Var.windows_loop.run_forever, daemon=True
-                )
-                Var.windows_thread.start()
-        return Var.windows_loop
+    windows_env_set = WindowsEnvSet()
 
     async def windows_get_result(o):
-        return asyncio.run_coroutine_threadsafe(o, windows_get_asyncio_event_loop()).result()
+        return windows_env_set.coroutine(o)
 
     def deferred_from_coro(o):
         if isinstance(o, Deferred):
@@ -70,13 +59,13 @@ if sys.platform == "win32" and sys.version_info >= (3, 8):
         return deferred_from_coro_default(windows_get_result(o))
 
 else:
-    windows_get_asyncio_event_loop = None
+    windows_env_set = None
     windows_get_result = None
     deferred_from_coro = deferred_from_coro_default
 
 __all__ = [
     "ScrapyPlaywrightDownloadHandler",
-    "windows_get_asyncio_event_loop",
+    "windows_env_set",
     "windows_get_result",
 ]
 
