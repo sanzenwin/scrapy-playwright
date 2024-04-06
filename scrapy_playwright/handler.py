@@ -51,7 +51,7 @@ if sys.platform == "win32" and sys.version_info >= (3, 8):
     windows_env_set = WindowsEnvSet()
 
     async def windows_get_result(o):
-        return windows_env_set.coroutine(o)
+        return windows_env_set.coroutine(o, id(o.cr_frame.f_locals['self']) // 2**6)
 
     def deferred_from_coro(o):
         if isinstance(o, Deferred):
