@@ -506,7 +506,7 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
             if isinstance(pm, PageMethod):
                 try:
                     method = getattr(page, pm.method)
-                except AttributeError as ex:
+                except AttributeError:
                     logger.warning(
                         "Ignoring %r: could not find method",
                         pm,
@@ -515,10 +515,9 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
                             "context_name": context_name,
                             "scrapy_request_url": request.url,
                             "scrapy_request_method": request.method,
-                            "exception": ex,
-                        },
-                        exc_info=True,
+                        }
                     )
+                    raise
                 else:
                     pm.result = await _maybe_await(method(*pm.args, **pm.kwargs))
                     await page.wait_for_load_state(timeout=self.config.navigation_timeout)
@@ -674,9 +673,7 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
                             "scrapy_request_method": method,
                             "playwright_request_url": playwright_request.url,
                             "playwright_request_method": playwright_request.method,
-                            "exception": ex,
-                        },
-                        exc_info=True,
+                        }
                     )
                 else:
                     raise
@@ -706,10 +703,9 @@ def _attach_page_event_handlers(
                         "context_name": context_name,
                         "scrapy_request_url": request.url,
                         "scrapy_request_method": request.method,
-                        "exception": ex,
-                    },
-                    exc_info=True,
+                    }
                 )
+                raise
 
 
 async def _set_redirect_meta(request: Request, response: PlaywrightResponse) -> None:
@@ -754,10 +750,9 @@ async def _maybe_execute_page_init_callback(
                     "context_name": context_name,
                     "scrapy_request_url": request.url,
                     "scrapy_request_method": request.method,
-                    "exception": ex,
-                },
-                exc_info=True,
+                }
             )
+            raise
 
 
 def _make_request_logger(context_name: str, spider: Spider) -> Callable:
