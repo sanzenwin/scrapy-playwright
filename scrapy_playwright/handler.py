@@ -268,9 +268,12 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
         page = await ctx_wrapper.context.new_page()
         self.stats.inc_value("playwright/page_count")
         total_page_count = self._get_total_page_count()
+        playwright_id = getattr(request, 'playwright_id', None)
         logger.debug(
-            "[Context=%s] New page created, page count is %i (%i for all contexts)",
+            "[Context=%s] New page <%s %s> created, page count is %i (%i for all contexts)",
             context_name,
+            request.url,
+            playwright_id,
             len(ctx_wrapper.context.pages),
             total_page_count,
             extra={
@@ -288,7 +291,7 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
 
         page.on("close", self._make_close_page_callback(context_name))
         page.on("crash", self._make_close_page_callback(context_name))
-        page.on("request", _make_request_logger(context_name, spider, getattr(request, 'playwright_id', None)))
+        page.on("request", _make_request_logger(context_name, spider, playwright_id))
         page.on("response", _make_response_logger(context_name, spider))
         page.on("request", self._increment_request_stats)
         page.on("response", self._increment_response_stats)
@@ -757,14 +760,13 @@ async def _maybe_execute_page_init_callback(
 
 def _make_request_logger(context_name: str, spider: Spider, playwright_id: str) -> Callable:
     async def _log_request(request: PlaywrightRequest) -> None:
-        uid = "" if playwright_id is None else f" {playwright_id}"
-        log_args = [context_name, request.method.upper(), request.url, uid, request.resource_type]
+        log_args = [context_name, request.method.upper(), request.url, playwright_id, request.resource_type]
         referrer = await _get_header_value(request, "referer")
         if referrer:
             log_args.append(referrer)
-            log_msg = "[Context=%s] Request: <%s %s%s> (resource type: %s, referrer: %s)"
+            log_msg = "[Context=%s] Request: <%s %s %s> (resource type: %s, referrer: %s)"
         else:
-            log_msg = "[Context=%s] Request: <%s %s%s> (resource type: %s)"
+            log_msg = "[Context=%s] Request: <%s %s %s> (resource type: %s)"
         logger.debug(
             log_msg,
             *log_args,
