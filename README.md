@@ -785,7 +785,7 @@ Values can be either callables or strings (in which case a spider method with th
 Example:
 
 ```python
-from playwright.async_api import Dialog
+from patchright.async_api import Dialog
 
 async def handle_dialog(dialog: Dialog) -> None:
     logging.info(f"Handled dialog with message: {dialog.message}")
@@ -969,7 +969,7 @@ translates roughly to:
 
 ```python
 import asyncio
-from playwright.async_api import async_playwright
+from patchright.async_api import async_playwright
 
 async def main():
     async with async_playwright() as pw:

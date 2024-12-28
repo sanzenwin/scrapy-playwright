@@ -6,7 +6,7 @@ from unittest import IsolatedAsyncioTestCase
 from uuid import uuid4
 
 import pytest
-from playwright.async_api import Browser, TimeoutError as PlaywrightTimeoutError
+from patchright.async_api import Browser, TimeoutError as PlaywrightTimeoutError
 from scrapy import Spider, Request
 from scrapy_playwright.page import PageMethod
 

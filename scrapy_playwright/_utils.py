@@ -1,7 +1,7 @@
 import logging
 from typing import Awaitable, Iterator, Optional, Tuple, Union
 
-from playwright.async_api import Error, Page, Request, Response
+from patchright.async_api import Error, Page, Request, Response
 from scrapy import Spider
 from scrapy.http.headers import Headers
 from scrapy.utils.python import to_unicode

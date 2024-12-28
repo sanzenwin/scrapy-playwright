@@ -4,7 +4,7 @@ from unittest import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock, patch
 
 import pytest
-from playwright.async_api import PlaywrightContextManager
+from patchright.async_api import PlaywrightContextManager
 from scrapy.exceptions import NotConfigured
 from scrapy.extensions.memusage import MemoryUsage
 

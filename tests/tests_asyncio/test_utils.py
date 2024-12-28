@@ -3,7 +3,7 @@ from unittest import IsolatedAsyncioTestCase
 from unittest.mock import AsyncMock
 
 import pytest
-from playwright.async_api import Error as PlaywrightError
+from patchright.async_api import Error as PlaywrightError
 from scrapy import Spider
 from scrapy.http.headers import Headers
 

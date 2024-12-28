@@ -37,6 +37,6 @@ setuptools.setup(
     install_requires=[
         "scrapy>=2.0,!=2.4.0",
         "playwright>=1.15",
-        "dektools<1.0.0",
+        "dektools[playwright]<1.0.0",
     ],
 )

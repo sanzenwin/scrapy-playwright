@@ -1,4 +1,4 @@
-from playwright.async_api import Dialog, Response as PlaywrightResponse
+from patchright.async_api import Dialog, Response as PlaywrightResponse
 from scrapy import Spider, Request
 from scrapy_playwright.page import PageMethod
 

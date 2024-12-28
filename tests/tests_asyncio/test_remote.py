@@ -7,7 +7,7 @@ from typing import Tuple
 from unittest import IsolatedAsyncioTestCase
 
 import pytest
-from playwright.async_api import async_playwright
+from patchright.async_api import async_playwright
 from scrapy import Request, Spider
 
 from tests import make_handler, assert_correct_response
