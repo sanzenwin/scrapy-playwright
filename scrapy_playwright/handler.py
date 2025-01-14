@@ -41,6 +41,8 @@ from scrapy_playwright._utils import (
     _maybe_await,
 )
 
+from dektools.playwright import fix_stealth_mode
+
 # Supporting for Windows
 if sys.platform == "win32" and sys.version_info >= (3, 8):
     from dektools.sync import EnvSet
@@ -221,6 +223,8 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
             context = await self.browser.new_context(**context_kwargs)
             persistent = False
             remote = False
+
+        await fix_stealth_mode(context)
 
         context.on(
             "close", self._make_close_browser_context_callback(name, persistent, remote, spider)
