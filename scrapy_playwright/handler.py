@@ -7,7 +7,7 @@ from ipaddress import ip_address
 from time import time
 from typing import Awaitable, Callable, Dict, Optional, Tuple, Type, TypeVar, Union
 
-from patchright.async_api import (
+from playwright.async_api import (
     BrowserContext,
     BrowserType,
     Download,
