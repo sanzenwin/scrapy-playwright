@@ -430,12 +430,12 @@ class ScrapyPlaywrightDownloadHandler(HTTPDownloadHandler):
                 server_addr = await response.server_addr()
                 server_ip_address = ip_address(server_addr["ipAddress"])
 
-        if download.get("exception"):
-            raise download["exception"]
-
         if not request.meta.get("playwright_include_page"):
             await page.close()
             self.stats.inc_value("playwright/page_count/closed")
+
+        if download.get("exception"):
+            raise download["exception"]
 
         if download:
             request.meta["playwright_suggested_filename"] = download.get("suggested_filename")
